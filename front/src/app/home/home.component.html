@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-2">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="userName">Name</label>
+        <input type="text" class="form-control" id="userName"  name="user_name" placeholder="Your name..." ngModel>
+      </div>
+      <div class="form-group">
+        <label for="userEmail">Email</label>
+        <input type="text" class="form-control" id="userEmail" name="user_email" placeholder="Your email..." ngModel ngControl="email">
+      </div>
+      <div class="form-group">
+        <label for="userPhone">Phone number</label>
+        <input type="text" class="form-control" id="userPhone" name="user_number" placeholder="Your phone number..." ngModel>
+      </div>
+      <button class="btn btn-success" type="submit">Submit</button>
+    </form>
+  </div>
+  <div id="all_users" class="col-md-2">
+    <ul class="list_style_none">
+      <li *ngFor="let user of users">
+        <p><span>Name: </span>{{ user.name }}</p>
+        <p><span>Email: </span>{{ user.email }}</p>
+        <p><span>Phone number: </span>{{ user.phone }}</p>
+        <button color="warn" class="remove_user" (click)="deleteUser(user._id)"  md-raised-button>Delete</button>
+      </li>
+    </ul>
+  </div>
+</div>

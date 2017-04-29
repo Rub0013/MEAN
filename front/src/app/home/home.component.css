@@ -1,0 +1,23 @@
+#all_users{
+    padding: 10px;
+    border: 1px solid rgba(16, 160, 133, 0.71);
+    border-radius: 3px;
+    margin-left: 50px;
+    width: 280px;
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+#all_users>ul{
+    width: 100%;
+}
+#all_users li{
+    margin: 5px auto;
+    width: 90%;
+    padding: 5px;
+    background: rgba(16, 160, 133, 0.7);
+    border-radius: 3px;
+}
+.list_style_none{
+    list-style: none;
+}

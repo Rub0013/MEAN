@@ -1,0 +1,11 @@
+# Dependency directories
+.idea/
+bin/uploads/
+*.log
+node_modules/
+front/.idea
+front/node_modules
+jspm_packages/
+
+# Uploaded files
+public/images/*

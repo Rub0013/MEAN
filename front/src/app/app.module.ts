@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { AddPicturesComponent } from './add-pictures/add-pictures.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { HomeComponent } from './home/home.component';
-import { LibraryComponent } from './library/library.component';
 import {MdButtonModule, MdCheckboxModule, MdInputModule} from '@angular/material';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
@@ -16,8 +15,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppComponent,
     AddPicturesComponent,
     GalleryComponent,
-    HomeComponent,
-    LibraryComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,

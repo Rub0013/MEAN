@@ -8,4 +8,4 @@ front/node_modules
 jspm_packages/
 
 # Uploaded files
-public/images/*
+front/src/assets/uploads/images/*

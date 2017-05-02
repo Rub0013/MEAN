@@ -29,10 +29,13 @@ export class HomeComponent implements OnInit {
     let phone = form.value.user_number;
     let user = new User(name,email,phone);
     this._usersService.addUser(user).subscribe(data => {
-      if(data.id){
+      if(data.success){
         user._id = data.id;
         this.users.push(user);
         form.reset();
+      }
+      else{
+        console.log(data.errors);
       }
     });
   }

@@ -31,7 +31,6 @@ export class AddPicturesComponent implements OnInit {
   }
 
   addImg() {
-    console.log(this.pic);
     var formData: any = new FormData();
     formData.append('photo',this.pic);
     this._uploadService.addImage(formData).subscribe(data => {

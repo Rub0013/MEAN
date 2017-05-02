@@ -1,3 +1,4 @@
-<p>
-  gallery works!
-</p>
+<div class="image-main" *ngFor="let pic of pics">
+  <img src="assets/uploads/images/{{ pic.name }}">
+  <button (click)="deleteImg(pic._id,pic.name)" type="submit" md-icon-button color="warn" class="del_pic"><i class="material-icons">delete_forever</i></button>
+</div>

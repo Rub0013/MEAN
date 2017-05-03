@@ -1,15 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploadService } from '../file-upload.service';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
-  providers: [ FileUploadService ]
+  providers: [ FileUploadService ],
+  animations: [
+    trigger('state', [
+      state('inactive', style({
+        backgroundColor: '#eee',
+        transform: 'scale(1)'
+      })),
+      state('active',   style({
+        backgroundColor: '#cfd8dc',
+        transform: 'scale(1.1)'
+      })),
+      transition('inactive => active', animate('100ms ease-in')),
+      transition('active => inactive', animate('100ms ease-out'))
+    ])
+  ]
 })
 export class GalleryComponent implements OnInit {
 
   pics: Array<any>;
+  state:string = 'inactive';
 
   constructor(private _uploadService:FileUploadService) { }
 
@@ -27,5 +43,10 @@ export class GalleryComponent implements OnInit {
       }
   });
 }
+
+  toggleState() {
+    // 1-line if statement that toggles the value:
+    this.state = this.state === 'inactive' ? 'active' : 'inactive';
+  }
 
 }

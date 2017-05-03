@@ -1,19 +1,46 @@
 <div class="row">
   <div class="col-md-2">
-    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div class="form-group">
         <label for="userName">Name</label>
-        <input type="text" class="form-control" id="userName"  name="user_name" placeholder="Your name..." ngModel>
+        <input type="text" class="form-control" id="userName" name="name" placeholder="Your name..." ngModel #name="ngModel" required>
+        <div *ngIf="name.errors && (name.dirty || name.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!name.errors.required">
+            Name is required!
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="userEmail">Email</label>
-        <input type="text" class="form-control" id="userEmail" name="user_email" placeholder="Your email..." ngModel ngControl="email">
+        <input type="text" class="form-control" id="userEmail" name="email" placeholder="Your email..." ngModel #email="ngModel"
+                   required [pattern] = "validEmail">
+        <div *ngIf="email.errors && (email.dirty || email.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!email.errors.required">
+            Email is required!
+          </div>
+          <div [hidden]="!email.errors.pattern">
+            Must be email!
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="userPhone">Phone number</label>
-        <input type="text" class="form-control" id="userPhone" name="user_number" placeholder="Your phone number..." ngModel>
+        <input type="text" class="form-control" id="userPhone" name="phone" placeholder="Your phone number..." ngModel #phone="ngModel" [pattern] = "validPhone" required>
+        <div *ngIf="phone.errors && (phone.dirty || phone.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!phone.errors.required">
+            Phone number is required!
+          </div>
+          <div [hidden]="!phone.errors.pattern">
+            Must contain only numbers!
+          </div>
+        </div>
       </div>
-      <button class="btn btn-success" type="submit">Submit</button>
+      <div class="form-group">
+        <button [disabled]="!form.valid" class="btn btn-success" type="submit">Submit</button>
+      </div>
     </form>
   </div>
   <div id="all_users" class="col-md-2">

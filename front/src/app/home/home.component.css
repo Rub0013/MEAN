@@ -21,3 +21,13 @@
 .list_style_none{
     list-style: none;
 }
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+}
+.form-group input{
+    margin-bottom: 5px;
+}

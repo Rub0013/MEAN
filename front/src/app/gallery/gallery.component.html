@@ -1,4 +1,4 @@
-<div class="image-main" *ngFor="let pic of pics">
+<div class="image-main" *ngFor="let pic of pics" [@state]="state" (click)="toggleState()">
   <img src="assets/uploads/images/{{ pic.name }}">
   <button (click)="deleteImg(pic._id,pic.name)" type="submit" md-icon-button color="warn" class="del_pic"><i class="material-icons">delete_forever</i></button>
 </div>

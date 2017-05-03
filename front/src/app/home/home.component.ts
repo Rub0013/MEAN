@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users.service';
-import { NgForm } from '@angular/forms';
 import 'rxjs/Rx';
 import { User } from '../models/user';
+
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [ UsersService ]
+  providers: [ UsersService ],
 })
 export class HomeComponent implements OnInit {
 
-  users:any = [];
+  users:Array<User>;
 
+  validEmail = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+  validPhone = /^\d+$/;
   constructor(private _usersService:UsersService) {
   }
 
@@ -23,10 +26,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onSubmit(form:NgForm) {
-    let name = form.value.user_name;
-    let email = form.value.user_email;
-    let phone = form.value.user_number;
+  onSubmit(form: any) {
+    let name = form.value.name;
+    let email = form.value.email;
+    let phone = form.value.phone;
     let user = new User(name,email,phone);
     this._usersService.addUser(user).subscribe(data => {
       if(data.success){
@@ -50,4 +53,5 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
 }

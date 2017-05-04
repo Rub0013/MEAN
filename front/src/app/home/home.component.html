@@ -45,11 +45,14 @@
   </div>
   <div id="all_users" class="col-md-2">
     <ul class="list_style_none">
-      <li *ngFor="let user of users">
+      <li *ngFor="let user of allUser()">
         <p><span>Name: </span>{{ user.name }}</p>
         <p><span>Email: </span>{{ user.email }}</p>
         <p><span>Phone number: </span>{{ user.phone }}</p>
-        <button color="warn" class="remove_user" (click)="deleteUser(user._id)"  md-raised-button>Delete</button>
+        <div class="user-buttons">
+          <button color="warn" class="remove_user" (click)="deleteUser(user._id)"  md-raised-button>Delete</button>
+          <button color="accent" class="update_user" (click)="updateUser(user._id)"  md-raised-button>Update</button>
+        </div>
       </li>
     </ul>
   </div>

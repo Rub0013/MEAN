@@ -12,11 +12,11 @@
     width: 100%;
 }
 #all_users li{
-    margin: 5px auto;
-    width: 90%;
+    margin: 5px;
     padding: 5px;
     background: rgba(16, 160, 133, 0.7);
     border-radius: 3px;
+    width: 100%;
 }
 .list_style_none{
     list-style: none;
@@ -30,4 +30,8 @@
 }
 .form-group input{
     margin-bottom: 5px;
+}
+.user-buttons{
+    display: flex;
+    justify-content: space-between;
 }

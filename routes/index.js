@@ -167,4 +167,25 @@ router.post('/remove_pic', function(req, res, next) {
     });
 });
 
+router.post('/update_user', function(req, res, next) {
+    var name = req.body.name;
+    var phone = req.body.phone;
+    var id = req.body.id;
+    mongo.connect(url, function (err, db) {
+        assert.equal(null, err);
+        db.collection('users').updateOne({"_id":objectId(id)}, { $set: { name : name, phone : phone } }, function (err, result) {
+            assert.equal(null, err);
+            db.close();
+            res.send({
+                data: {
+                    name: name,
+                    phone: phone
+                },
+                errors: false,
+                success: true,
+            });
+        });
+    });
+});
+
 module.exports = router;

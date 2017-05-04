@@ -11,6 +11,7 @@ export class UsersService {
   public static GET_USERS_API = `${UsersService.API_BASE}/users`;
   public static NEW_USER_API = `${UsersService.API_BASE}/add_user`;
   public static DELETE_USER_API = `${UsersService.API_BASE}/delete_user?id=`;
+  public static UPDATE_USER_API = `${UsersService.API_BASE}/update_user`;
 
   constructor(private _http:Http) {}
 
@@ -35,5 +36,18 @@ export class UsersService {
         .map((res: Response) => {
             return res.json();
         });
+  }
+
+  updateUser(id:any, name:string = null, phone:number = null){
+      let body = JSON.stringify({
+          id:id,
+          name:name,
+          phone:phone
+      });
+      let headers = new Headers({'Content-Type':'application/json'});
+      return this._http.post(UsersService.UPDATE_USER_API, body, {headers:headers})
+          .map((res: Response) => {
+              return res.json();
+          });
   }
 }

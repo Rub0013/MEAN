@@ -1,0 +1,19 @@
+<div class="profile-main">
+   <div id="info">
+      <p><span>Name: </span>{{ returnUser()?.name }}</p>
+      <p><span>Email: </span>{{ returnUser()?.email }}</p>
+      <p><span>Phone number: </span>{{ returnUser()?.phone }}</p>
+      <button color="accent" class="update_user" (click)="updateUser()"  md-raised-button>Update</button>
+   </div>
+   <div id="profile-pic">
+      <div class="img">
+         <img *ngIf="!returnUser()?.image" src="assets/uploads/users-images/default.png">
+         <img *ngIf="returnUser()?.image" src="assets/uploads/users-images/{{ returnUser()?.image }}">
+      </div>
+      <div class="buttons">
+         <button color="primary" class="update_pic" (click)="updateImg()"  md-raised-button>Update</button>
+         <button [disabled] = "deleteImgActive" color="warn" class="delete_pic" (click)="deleteImg()"  md-raised-button>Delete</button>
+      </div>
+   </div>
+</div>
+

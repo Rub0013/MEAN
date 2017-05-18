@@ -7,9 +7,16 @@ import { AppComponent } from './app.component';
 import { AddPicturesComponent } from './add-pictures/add-pictures.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { HomeComponent } from './home/home.component';
-import { UpdateModal } from './home/home.component';
 import { MdButtonModule, MdCheckboxModule, MdInputModule, MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
+import { ProfileComponent } from './profile/profile.component';
+import { UpdateInfoModal } from './profile/profile.component';
+import { UpdateImageModal } from './profile/profile.component';
+
 
 @NgModule({
   declarations: [
@@ -17,10 +24,15 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     AddPicturesComponent,
     GalleryComponent,
     HomeComponent,
-    UpdateModal
+    UpdateInfoModal,
+    UpdateImageModal,
+    LoginComponent,
+    RegisterComponent,
+    ProfileComponent
   ],
   entryComponents: [
-    UpdateModal
+    UpdateInfoModal,
+    UpdateImageModal
   ],
   imports: [
     BrowserModule,
@@ -33,7 +45,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     MaterialModule,
     routes
   ],
-  providers: [],
+  providers: [AuthGuard,AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

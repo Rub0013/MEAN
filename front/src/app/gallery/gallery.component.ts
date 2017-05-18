@@ -30,7 +30,7 @@ export class GalleryComponent implements OnInit {
   constructor(private _uploadService:FileUploadService) { }
 
   ngOnInit() {
-    this._uploadService.getUsers().subscribe(data => {
+    this._uploadService.getImages().subscribe(data => {
       this.pics = data;
     });
   }

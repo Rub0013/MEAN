@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-md-2">
+    <form #form="ngForm">
+      <div class="form-group">
+        <label for="userName">Name</label>
+        <input type="text" class="form-control" id="userName" name="name" placeholder="Your name..." ngModel #name="ngModel" required>
+        <div *ngIf="name.errors && (name.dirty || name.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!name.errors.required">
+            Name is required!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="userEmail">Email</label>
+        <input type="text" class="form-control" id="userEmail" name="email" placeholder="Your email..." ngModel #email="ngModel"
+               required [pattern] = "validEmail">
+        <div *ngIf="email.errors && (email.dirty || email.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!email.errors.required">
+            Email is required!
+          </div>
+          <div [hidden]="!email.errors.pattern">
+            Must be email!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="userPass">Password</label>
+        <input type="password" class="form-control" id="userPass" name="pass" placeholder="Your password..." ngModel #pass="ngModel"
+               required>
+        <div *ngIf="pass.errors && (pass.dirty || pass.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!pass.errors.required">
+            Password is required!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="userPhone">Phone number</label>
+        <input type="text" class="form-control" id="userPhone" name="phone" placeholder="Your phone number..." ngModel #phone="ngModel" [pattern] = "validPhone" required>
+        <div *ngIf="phone.errors && (phone.dirty || phone.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!phone.errors.required">
+            Phone number is required!
+          </div>
+          <div [hidden]="!phone.errors.pattern">
+            Must contain only numbers!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="image_file">Profile picture</label>
+        <label class="btn btn-default btn-file">
+          Browse <input (change)="onChange($event)" type="file" name="image" id="image_file" style="display: none" accept=".jpg,.png" ngModel #image="ngModel">
+        </label>
+        <div *ngIf="image.errors && (image.dirty || image.touched)"
+             class="alert alert-danger">
+          <div [hidden]="!image.errors.required">
+            Image is required!
+          </div>
+        </div>
+      </div>
+      <div id="form-submit" class="form-group">
+        <button (click)="register(form,$event)" [disabled]="!form.valid" class="btn btn-success" type="button">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+

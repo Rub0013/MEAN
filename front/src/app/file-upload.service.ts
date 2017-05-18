@@ -20,7 +20,7 @@ export class FileUploadService {
         });
   }
 
-  getUsers() :Observable<any>{
+    getImages() :Observable<any>{
     return this._http.get(FileUploadService.GET_IMAGES_API)
         .map((res: Response) => {
            return res.json();

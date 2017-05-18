@@ -1,3 +1,6 @@
+*{
+    margin: 0;
+}
 #all_users{
     padding: 10px;
     border: 1px solid rgba(16, 160, 133, 0.71);
@@ -30,6 +33,7 @@
 }
 .form-group input{
     margin-bottom: 5px;
+    padding-left: 5px;
 }
 .user-buttons{
     display: flex;

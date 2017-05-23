@@ -5,7 +5,6 @@ var objectId = require('mongodb').ObjectID;
 var assert = require('assert');
 const fs = require('fs');
 var url = 'mongodb://localhost:27017/test';
-var imagesFolder = "../front/src/assets/uploads/images/";
 var usersPicsFolder = "../front/src/assets/uploads/users-images/";
 var jwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt');
@@ -51,65 +50,9 @@ router.delete('/delete_user', function(req, res, next) {
     });
 });
 
-router.post('/add_user', function(req, res, next) {
-    req.checkBody({
-        'user.email': {
-            notEmpty: {
-                errorMessage: 'Write your email!'
-            },
-            isEmail: {
-                errorMessage: 'Invalid email address!'
-            }
-        },
-        'user.name': {
-            notEmpty: {
-                errorMessage: 'Write your name!'
-            }
-        },
-        'user.phone': {
-            notEmpty: {
-                errorMessage: 'Write your phone number!'
-            },
-            isNumeric: {
-                errorMessage: 'Phone number must contain only numbers!'
-            }
-        }
-    });
-
-    req.getValidationResult().then(function(result) {
-        var errors = result.useFirstErrorOnly().array();
-        if(errors.length > 0){
-            res.send({
-                errors: errors,
-                success: false
-            });
-        }
-        else{
-            var user = req.body.user;
-            mongo.connect(url, function (err, db) {
-                assert.equal(null, err);
-                db.collection('users').insertOne(user, function (err, result) {
-                    if(err){
-                        res.send({
-                            errors: err,
-                            success: false,
-                        });
-                    }
-                    else{
-                        res.send({
-                            errors: false,
-                            success: true,
-                            id: result.ops[0]._id
-                        });
-                    }
-                    db.close();
-                });
-            });
-        }
-    });
-});
-
 router.post('/register', function(req, res, next) {
+    //Run this in the mongo shell for unique emails...
+    // db.{collection name}.ensureIndex( { email: 1 }, { unique: true } )
 
     req.checkBody({
         'email': {
@@ -174,6 +117,7 @@ router.post('/register', function(req, res, next) {
                 user.password = hash;
                 mongo.connect(url, function (err, db) {
                     assert.equal(null, err);
+                    db.collection('users').createIndex( { "email": 1 }, { unique: true } );
                     db.collection('users').insertOne(user, function (err, result) {
                         if(err){
                             res.send({
@@ -221,15 +165,15 @@ router.post('/login', function(req, res, next) {
 
     req.getValidationResult().then(function(result) {
         var errors = result.useFirstErrorOnly().array();
-        if(errors.length > 0){
+        if(errors.length > 0) {
             res.send({
                 errors: errors,
                 success: false
             });
         }
         else{
-            let login = req.body.login;
-            let pass = req.body.password;
+            const login = req.body.login;
+            const pass = req.body.password;
             mongo.connect(url, function (err, db) {
                 assert.equal(null, err);
                 var collection = db.collection('users');
@@ -247,7 +191,7 @@ router.post('/login', function(req, res, next) {
                                     name: doc.name,
                                     id: doc._id
                                 };
-                                var token = jwt.sign(tokenData, privateKey, { expiresIn: 60*60 });
+                                var token = jwt.sign(tokenData, privateKey, { expiresIn: 60 });
                                 res.send({
                                     info: {
                                         token: token,
@@ -288,79 +232,19 @@ router.post('/login', function(req, res, next) {
 });
 
 router.post('/verify', function(req, res, next) {
-    let verifyToken = req.body.verifyToken;
+    const verifyToken = req.body.verifyToken;
     jwt.verify(verifyToken, privateKey, function(err, decoded) {
-        if(err){
+        if (err) {
             res.send({
                 error: err,
                 success: false
             });
-        }
-        else{
+        } else{
             res.send({
                 error: false,
                 success: true
             });
         }
-    });
-});
-
-router.post('/add_image', function(req, res, next) {
-    if(req.files){
-        var file = req.files.photo;
-        var fileName = file.name;
-        var extention = fileName.substr(fileName.lastIndexOf('.')+1);
-        var time = Math.round(new Date().getTime() / 1000);
-        var newName = time + "." + extention;
-        var image = {
-            name: newName
-        };
-        file.mv(imagesFolder + newName,function (err) {
-            if(err){
-                console.log(err);
-                res.send({
-                    error: true,
-                    success: false
-                });
-            }
-            else{
-                mongo.connect(url, function (err, db) {
-                    assert.equal(null, err);
-                    db.collection('images').insertOne(image, function (err, result) {
-                        if(!err){
-                            console.log('added');
-                            db.close();
-                            res.json({
-                                error: false,
-                                success: true
-                            });
-                        }
-                        else{
-                            console.log('something gone wrong!');
-                            res.send({
-                                error: true,
-                                success: false
-                            });
-                        }
-                    });
-                });
-            }
-        });
-    }
-});
-
-router.get('/get_images', function(req, res, next) {
-    mongo.connect(url, function (err, db) {
-        var allPics = [];
-        assert.equal(null, err);
-        var cursor = db.collection('images').find();
-        cursor.forEach(function (doc, err) {
-            assert.equal(null, err);
-            allPics.push(doc);
-        }, function () {
-            db.close();
-            res.send(allPics);
-        });
     });
 });
 

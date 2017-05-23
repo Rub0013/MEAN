@@ -18,95 +18,107 @@ export class AuthService {
   public static AUTH_CHECK_API = `${AuthService.API_BASE}/verify`;
 
   public static LOCAL_LOG_USER = 'logged-user';
+  public signedIn: User|boolean;
 
 
-  constructor(private _http:Http, private router: Router) {}
+  constructor(private _http: Http, private router: Router) {}
 
-  localLogin(name,id,token){
-    let loggedUser = {
+  localLogin(name, id, token) {
+    const loggedUser = {
       name: name,
       id: id,
       token: token
-    }
-    localStorage.setItem(AuthService.LOCAL_LOG_USER,JSON.stringify(loggedUser));
+    };
+    localStorage.setItem(AuthService.LOCAL_LOG_USER, JSON.stringify(loggedUser));
+    this.signedInToggle();
   }
 
-  login(login: string,pass: any){
-    let body = JSON.stringify({login:login, password:pass});
-    let headers = new Headers({'Content-Type':'application/json'});
-    return this._http.post(AuthService.LOGIN_USER_API, body, {headers:headers})
+  login(login: string, pass: any) {
+    const body = JSON.stringify({login: login, password: pass});
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this._http.post(AuthService.LOGIN_USER_API, body, {headers: headers})
         .map((res: Response) => {
           return res.json();
         });
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem(AuthService.LOCAL_LOG_USER);
+    this.signedInToggle();
   }
 
-  getLoggedUser(){
-    return JSON.parse(localStorage.getItem(AuthService.LOCAL_LOG_USER))
+  signedInToggle() {
+    const user = this.getLoggedUser();
+    if (user) {
+      this.signedIn = user;
+    } else {
+      this.signedIn = false;
+    }
   }
 
-  register(formData: any){
+  getLoggedUser() {
+    return JSON.parse(localStorage.getItem(AuthService.LOCAL_LOG_USER));
+  }
+
+  register(formData: any) {
     return this._http.post(AuthService.NEW_USER_API, formData)
         .map((res: Response) => {
           return res.json();
         });
   }
 
-  isAuthenticated(){
-    let loggedUser = this.getLoggedUser()
-    if(loggedUser){
-      let tokenData = {
+  isAuthenticated() {
+    const loggedUser = this.getLoggedUser();
+    if (loggedUser) {
+      const tokenData = {
         verifyToken: loggedUser.token
       };
-      let body = JSON.stringify(tokenData);
-      let headers = new Headers({'Content-Type':'application/json'});
-      return this._http.post(AuthService.AUTH_CHECK_API, body, {headers:headers})
+      const body = JSON.stringify(tokenData);
+      const headers = new Headers({'Content-Type': 'application/json'});
+      return this._http.post(AuthService.AUTH_CHECK_API, body, {headers: headers})
           .map((res: Response) => {
-        let response = res.json();
-            if(response.success){
+            const response = res.json();
+            if (response.success) {
               return true;
             } else {
               this.logout();
-              this.router.navigate(["login"]);
+              this.router.navigate(['login']);
               return false;
             }
           });
     }
   }
 
-  getUser(id:string) :Observable<any>{
+  getUser(id: string): Observable<any> {
     return this._http.get(AuthService.GET_USER_API + id)
         .map((res: Response) => {
           return res.json();
         });
   }
 
-  updateUser(id:any, name:string = null, phone:number = null){
-    let body = JSON.stringify({
-      id:id,
-      name:name,
-      phone:phone
+  updateUser(id: any, name: string = null, phone: number = null){
+    const body = JSON.stringify({
+      id: id,
+      name: name,
+      phone: phone
     });
-    let headers = new Headers({'Content-Type':'application/json'});
-    return this._http.post(AuthService.UPDATE_USER_API, body, {headers:headers})
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this._http.post(AuthService.UPDATE_USER_API, body, {headers: headers})
         .map((res: Response) => {
           return res.json();
         });
   }
 
-  deletePic(id: number, name: string){
-    let body = JSON.stringify({id:id, name:name});
-    let headers = new Headers({'Content-Type':'application/json'});
-    return this._http.post(AuthService.DELETE_IMAGE_API, body, {headers:headers})
+  deletePic(id: number, name: string) {
+    const body = JSON.stringify({id: id, name: name});
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this._http.post(AuthService.DELETE_IMAGE_API, body, {headers: headers})
         .map((res: Response) => {
           return res.json();
         });
   }
 
-  changePic(formData: any){
+  changePic(formData: any) {
     return this._http.post(AuthService.CHANGE_IMAGE_API, formData)
         .map((res: Response) => {
           return res.json();

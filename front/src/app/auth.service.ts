@@ -4,11 +4,12 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Router } from '@angular/router';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class AuthService {
 
-  public static API_BASE = 'http://localhost:8888/api';
+  public static API_BASE = 'http://localhost:8886/api';
   public static LOGIN_USER_API = `${AuthService.API_BASE}/login`;
   public static NEW_USER_API = `${AuthService.API_BASE}/register`;
   public static GET_USER_API = `${AuthService.API_BASE}/get_user?id=`;
@@ -18,7 +19,7 @@ export class AuthService {
   public static AUTH_CHECK_API = `${AuthService.API_BASE}/verify`;
 
   public static LOCAL_LOG_USER = 'logged-user';
-  public signedIn: User|boolean;
+  public signedIn: User | boolean;
 
 
   constructor(private _http: Http, private router: Router) {}
@@ -82,7 +83,6 @@ export class AuthService {
               return true;
             } else {
               this.logout();
-              this.router.navigate(['login']);
               return false;
             }
           });

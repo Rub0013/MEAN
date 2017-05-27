@@ -4,7 +4,6 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Router } from '@angular/router';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +19,7 @@ export class AuthService {
 
   public static LOCAL_LOG_USER = 'logged-user';
   public signedIn: User | boolean;
+
 
 
   constructor(private _http: Http, private router: Router) {}

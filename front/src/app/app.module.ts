@@ -10,6 +10,7 @@ import { MdButtonModule, MdCheckboxModule, MdInputModule, MaterialModule } from 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './auth.guard';
+import { RedirectAuthenticatedGuard } from './redirect-authenticated.guard';
 import { AuthService } from './auth.service';
 import { ProfileComponent } from './profile/profile.component';
 import { UpdateInfoModal } from './profile/profile.component';
@@ -45,7 +46,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     routes
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [AuthGuard, RedirectAuthenticatedGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

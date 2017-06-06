@@ -16,7 +16,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { UpdateInfoModal } from './profile/profile.component';
 import { UpdateImageModal } from './profile/profile.component';
 import { NavMainComponent } from './nav-main/nav-main.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginFacebookComponent } from './login-facebook/login-facebook.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    NavMainComponent
+    NavMainComponent,
+    LoginFacebookComponent,
+    ChatComponent
   ],
   entryComponents: [
     UpdateInfoModal,

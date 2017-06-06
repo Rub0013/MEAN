@@ -10,6 +10,8 @@ import 'rxjs/Rx';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
+  facebookLoginHref = 'http://localhost:8886/auth/facebook';
+
   constructor(private _authService: AuthService, private _router: Router) { }
 
   ngOnInit() {}
@@ -30,4 +32,5 @@ export class LoginComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 }

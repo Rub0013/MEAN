@@ -16,21 +16,18 @@ export class AuthService {
   public static DELETE_IMAGE_API = `${AuthService.API_BASE}/remove_pic`;
   public static CHANGE_IMAGE_API = `${AuthService.API_BASE}/change_pic`;
   public static AUTH_CHECK_API = `${AuthService.API_BASE}/verify`;
+  public static LOGIN_FACEBOOK_API = `${AuthService.API_BASE}/facebookLogin`;
 
   public static LOCAL_LOG_USER = 'logged-user';
-  public signedIn: User | boolean;
+  public signedIn: User;
 
 
 
   constructor(private _http: Http, private router: Router) {}
 
-  localLogin(name, id, token) {
-    const loggedUser = {
-      name: name,
-      id: id,
-      token: token
-    };
-    localStorage.setItem(AuthService.LOCAL_LOG_USER, JSON.stringify(loggedUser));
+  localLogin(name, id, token, image: any = null, imageURL: any = null) {
+    const loggedUser = new User(name, id, token, image, imageURL);
+        localStorage.setItem(AuthService.LOCAL_LOG_USER, JSON.stringify(loggedUser));
     this.signedInToggle();
   }
 
@@ -38,6 +35,15 @@ export class AuthService {
     const body = JSON.stringify({login: login, password: pass});
     const headers = new Headers({'Content-Type': 'application/json'});
     return this._http.post(AuthService.LOGIN_USER_API, body, {headers: headers})
+        .map((res: Response) => {
+          return res.json();
+        });
+  }
+
+  loginFacebook(id: string) {
+    const body = JSON.stringify({id: id});
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this._http.post(AuthService.LOGIN_FACEBOOK_API, body, {headers: headers})
         .map((res: Response) => {
           return res.json();
         });
@@ -53,7 +59,7 @@ export class AuthService {
     if (user) {
       this.signedIn = user;
     } else {
-      this.signedIn = false;
+      this.signedIn = null;
     }
   }
 
@@ -124,4 +130,5 @@ export class AuthService {
           return res.json();
         });
   }
+
 }

@@ -19,6 +19,9 @@
         <li>
           <a routerLink="gallery">Gallery</a>
         </li>
+        <li>
+          <a routerLink="chat">Chat</a>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="!authService.signedIn">
@@ -28,8 +31,12 @@
           <a routerLink="login"><span class="glyphicon glyphicon-log-in"></span> Sign In</a>
         </li>
         <li *ngIf="authService.signedIn" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span> {{ authService.signedIn.name }}
+          <a id="user-block" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <div>
+              <span *ngIf="!authService.signedIn.imageURL" class="glyphicon glyphicon-user"></span>
+              <img *ngIf="authService.signedIn.imageURL" class="facebookImage" src="{{authService.signedIn.imageURL}}">
+              {{ authService.signedIn.name }}
+            </div>
           </a>
           <ul class="dropdown-menu">
             <li>

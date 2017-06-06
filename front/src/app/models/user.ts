@@ -1,15 +1,19 @@
 export class User {
     name: string;
-    phone: number;
-    email: string;
-    password: any;
     _id: number;
+    token: string;
     image: string;
-    constructor(name: string, phone: number, email: string, password: any) {
+    imageURL: string;
+    email: string;
+    phone: number;
+    constructor(name: string, _id: number, token: string, image: string = null, imageURL: string = null, email: string = null, phone: number = null) {
         this.name = name;
-        this.phone = phone;
+        this._id = _id;
+        this.token = token;
+        this.image = image;
+        this.imageURL = imageURL;
         this.email = email;
-        this.password = password;
+        this.phone = phone;
     }
 }
 

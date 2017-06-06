@@ -10,13 +10,28 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var privateKey = '31FvVSm4XvjYOh5Y';
+var passport = require('passport');
+
+function makeAuthToken(name, id) {
+    var tokenData = {
+        name: name,
+        id: id
+    };
+    return jwt.sign(tokenData, privateKey, { expiresIn: 60*60 });
+}
 
 router.get('/get_user',function (req, res, next) {
     var id = req.query.id;
     mongo.connect(url, function (err, db) {
+        var selector;
+        if (id.length > 17) {
+            selector = {"_id":objectId(id)};
+        } else {
+            selector = {"_id": id};
+        }
         assert.equal(null, err);
         var collection = db.collection('users');
-        collection.findOne({"_id":objectId(id)},{'email':1,'name':1,'phone':1,'image':1}, function (err, doc) {
+        collection.findOne(selector,{'email':1,'name':1,'phone':1,'image':1}, function (err, doc) {
             if (err) {
                 res.send({
                     errors: err,
@@ -31,21 +46,6 @@ router.get('/get_user',function (req, res, next) {
                 });
             }
             db.close();
-        });
-    });
-});
-
-router.delete('/delete_user', function(req, res, next) {
-    var id = req.query.id;
-    mongo.connect(url, function (err, db) {
-        assert.equal(null, err);
-        db.collection('users').deleteOne({"_id":objectId(id)}, function (err, result) {
-            assert.equal(null, err);
-            console.log('Item deleted!');
-            db.close();
-            res.send({
-                success:true
-            });
         });
     });
 });
@@ -100,7 +100,7 @@ router.post('/register', function(req, res, next) {
                 name: name,
                 email: email,
                 phone: phone
-            }
+            };
             if(req.files){
                 var file = req.files.userImage;
                 var fileName = file.name;
@@ -119,7 +119,7 @@ router.post('/register', function(req, res, next) {
                     assert.equal(null, err);
                     db.collection('users').createIndex( { "email": 1 }, { unique: true } );
                     db.collection('users').insertOne(user, function (err, result) {
-                        if(err){
+                        if(err) {
                             res.send({
                                 errors: err,
                                 success: false,
@@ -187,11 +187,7 @@ router.post('/login', function(req, res, next) {
                     if (doc) {
                         bcrypt.compare(pass, doc.password, function(err, result) {
                             if(result){
-                                var tokenData = {
-                                    name: doc.name,
-                                    id: doc._id
-                                };
-                                var token = jwt.sign(tokenData, privateKey, { expiresIn: 60 });
+                                var token = makeAuthToken(doc.name, doc._id);
                                 res.send({
                                     info: {
                                         token: token,
@@ -223,6 +219,63 @@ router.post('/login', function(req, res, next) {
                             errors: "Wrong login!",
                             success: false
                         });
+                    }
+                    db.close();
+                });
+            });
+        }
+    });
+});
+
+router.post('/facebookLogin', function(req, res, next) {
+
+    req.checkBody({
+        'id': {
+            notEmpty: {
+                errorMessage: 'No Id!'
+            }
+        }
+    });
+
+    req.getValidationResult().then(function(result) {
+        var errors = result.useFirstErrorOnly().array();
+        if(errors.length > 0) {
+            res.send({
+                errors: errors,
+                success: false
+            });
+        }
+        else{
+            const id = req.body.id;
+            mongo.connect(url, function (err, db) {
+                assert.equal(null, err);
+                var collection = db.collection('users');
+                collection.findOne({"_id": id}, function (err, doc) {
+                    if (err) {
+                        res.send({
+                            errors: err,
+                            success: false
+                        });
+                    } else {
+                        if (doc) {
+                            var token = makeAuthToken(doc.name, doc._id);
+                            res.send({
+                                info: {
+                                    token: token,
+                                    name: doc.name,
+                                    imageURL: doc.imageURL,
+                                    id: doc._id
+                                },
+                                errors: false,
+                                success: true
+                            });
+                        }
+                        else {
+                            res.send({
+                                errors: "Wrong login!",
+                                success: false
+                            });
+                        }
                     }
                     db.close();
                 });
@@ -338,6 +391,11 @@ router.post('/update_user', function(req, res, next) {
             });
         });
     });
+});
+
+
+router.post('/auth/facebook', function(req, res, next) {
+
 });
 
 

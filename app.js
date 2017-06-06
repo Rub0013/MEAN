@@ -9,14 +9,37 @@ var fileUpload = require('express-fileupload');
 var cors = require('cors');
 
 var index = require('./routes/index');
+var authFacebook = require('./routes/authFacebook');
 
 var app = express();
+var http = require('http').createServer(app);
+var io = require("socket.io").listen(http);
+
+http.listen(8887);
+
+io.on('connection', function (socket) {
+
+    socket.on('join', function(data) {
+        console.log('Id of connected user - ' + socket.id);
+        console.log(JSON.parse(data));
+    });
+
+    socket.on('message', function (data) {
+        const msg = JSON.parse(data);
+        socket.broadcast.emit('message', msg);
+    });
+
+    socket.on('disconnect', function () {
+        console.log('Id of disconnected user - ' + socket.id);
+    });
+});
+
 
 var corsOptions = {
     origin: ['http://localhost:4200'],
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
-}
+};
 app.use(cors(corsOptions));
 app.use(fileUpload());
 
@@ -35,6 +58,8 @@ app.use(expressValidator());
 
 
 app.use('/api', index);
+app.use('/auth/facebook', authFacebook);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

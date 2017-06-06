@@ -13,30 +13,26 @@ import { AuthService } from '../auth.service';
 export class ProfileComponent implements OnInit {
 
   static user: User;
-  deleteImgActive: boolean = true;
+  deleteImgActive = true;
 
-  constructor(public dialog: MdDialog, private _authService:AuthService) { }
+  constructor(public dialog: MdDialog, private _authService: AuthService) { }
 
   ngOnInit() {
-    let loged = this._authService.getLoggedUser();
-    this._authService.getUser(loged.id).subscribe(data => {
-      if(data.success){
-        ProfileComponent.user = data.user;
-        if(ProfileComponent.user.image){
+    ProfileComponent.user = this._authService.getLoggedUser();
+      if (ProfileComponent.user.image) {
           this.deleteImgActive = false;
-        }
       }
-    });
+      console.log(ProfileComponent.user);
   }
 
-  returnUser(){
+  returnUser() {
     return ProfileComponent.user;
   }
 
   deleteImg() {
-    let id = ProfileComponent.user._id;
-    let name = ProfileComponent.user.image;
-    this._authService.deletePic(id,name).subscribe(data => {
+    const id = ProfileComponent.user._id;
+    const name = ProfileComponent.user.image;
+    this._authService.deletePic(id, name).subscribe(data => {
       if (data.success) {
         delete ProfileComponent.user.image;
         this.deleteImgActive = true;
@@ -44,7 +40,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateImg(){
+  updateImg() {
     this.dialog.open(UpdateImageModal);
   }
 
@@ -76,7 +72,7 @@ export class UpdateInfoModal implements OnInit {
   userPhone: number;
   userId: number;
 
-  constructor(public dialogRef: MdDialogRef<UpdateInfoModal>, private _authService:AuthService) {
+  constructor(public dialogRef: MdDialogRef<UpdateInfoModal>, private _authService: AuthService) {
   }
 
   ngOnInit() {
@@ -87,7 +83,7 @@ export class UpdateInfoModal implements OnInit {
 
   updateUserModal() {
     this._authService.updateUser(this.userId, this.userName, this.userPhone).subscribe(data => {
-      if(data.success){
+      if (data.success) {
         ProfileComponent.user.name = data.data.name;
         ProfileComponent.user.phone = data.data.phone;
       }
@@ -115,10 +111,10 @@ export class UpdateImageModal implements OnInit {
   userId: number;
   oldImage: string;
   newImage: any = null;
-  submitActive: boolean = true;
+  submitActive = true;
 
 
-  constructor(public dialogRef: MdDialogRef<UpdateImageModal>, private _authService:AuthService) {
+  constructor(public dialogRef: MdDialogRef<UpdateImageModal>, private _authService: AuthService) {
   }
 
   ngOnInit() {
@@ -126,13 +122,13 @@ export class UpdateImageModal implements OnInit {
     this.oldImage = ProfileComponent.user.image;
   }
 
-  onChange(event){
+  onChange(event) {
     let image = event.srcElement.files[0];
-    if(image){
+    if (image) {
       this.submitActive = false;
       this.newImage = image;
     }
-    else{
+    else {
       this.submitActive = true;
       this.newImage = null;
     }

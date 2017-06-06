@@ -1,0 +1,11 @@
+.facebookImage {
+    width: 35px;
+    border: 2px solid #04519b;
+    border-radius: 50%;
+}
+#user-block {
+    padding: 0 !important;
+}
+#user-block div {
+    padding: 7px;
+}

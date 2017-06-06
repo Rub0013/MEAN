@@ -1,0 +1,30 @@
+<div id="conversation-main-block">
+    <div id="show-conversation-block" class="scrollbar">
+        <div class="message" *ngFor="let message of messages">
+            <p>{{message.senderName}}</p>
+            <pre class="pre-message">{{message.message}}</pre>
+        </div>
+    </div>
+    <div id="conversation-tools-block">
+        <div id="join-or-leave">
+            <button *ngIf="!connected" (click)="joinConversation()" class="btn btn-primary">Join to conversation</button>
+            <button *ngIf="connected" (click)="leaveConversation()" class="btn btn-danger">Leave conversation</button>
+        </div>
+        <div *ngIf="connected" id="send-message-block">
+            <form #form="ngForm">
+                <div class="form-group">
+                    <textarea class="form-control" id="userMessage" name="message" placeholder="Your message..." ngModel #message="ngModel" required></textarea>
+                    <div *ngIf="message.errors && (message.dirty || message.touched)"
+                         class="alert alert-danger">
+                        <div [hidden]="!message.errors.required">
+                            Message is required!
+                        </div>
+                    </div>
+                </div>
+                <div id="form-submit" class="form-group">
+                    <button (click)="sendMessage(form,$event)" [disabled]="!form.valid" class="btn btn-success" type="button">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
